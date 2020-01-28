@@ -26,11 +26,27 @@ const displayVideo = async () => {
 }
 
 
-const faceDetect = async () => {
+const detectFace = async () => {
   const faces = await faceDetector.detect(video)
-  console.log(faces.length)
+  faces.forEach(drawFace)
   // ask browser for next animation frame, then fire off detect
-  requestAnimationFrame(faceDetect)
+  requestAnimationFrame(detectFace)
 }
 
-displayVideo().then(faceDetect)
+
+const drawFace = (face) => {
+  ctx.clearRect(0,0, canvas.width, canvas.height)
+  const {width, height, top, left} =  face.boundingBox
+
+  // eye location
+  // const {landmarks} = face
+  // console.log(landmarks[0].locations[0].x)
+  // console.log(face)
+  // console.log({width, height, top, left})
+  
+  ctx.fillStyle = 'yellow';
+  ctx.fillRect(left, top, width + 30, height + 30);
+}
+
+
+displayVideo().then(detectFace)
